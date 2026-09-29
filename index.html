@@ -156,20 +156,24 @@ body.light .pillobj{color:#7d2bb8}
 .sk i{display:block;font-style:normal;font-size:1.5rem;margin-bottom:4px}
 .quick{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:22px}
 .quick button{display:flex;align-items:center;gap:10px;padding:14px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--txt);font-size:.85rem;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:var(--shine)}
+.trow{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:.15s}
+.trow:last-child{border-bottom:none}
+.trow:active{background:var(--bg2)}
+.trow.cur{background:color-mix(in srgb,var(--accent) 14%,transparent)}
+.trow.tdone{opacity:.55}
+.trow .tt{width:52px;flex-shrink:0;font-size:.72rem;font-weight:800;color:var(--muted);font-variant-numeric:tabular-nums}
+.trow.cur .tt{color:var(--accent)}
+.trow .ti{font-size:1.1rem;flex-shrink:0}
+.trow .tn{flex:1;min-width:0;font-size:.86rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.trow.tdone .tn{text-decoration:line-through;color:var(--muted)}
+.trow .txp{font-size:.72rem;font-weight:800;color:var(--green);flex-shrink:0}
+.trow .tcheck{width:22px;height:22px;border-radius:50%;background:var(--green);color:#03210b;display:flex;align-items:center;justify-content:center;font-size:.72rem;flex-shrink:0}
+.trow .tarrow{color:var(--muted);font-size:1.1rem;flex-shrink:0}
 .subnav{display:flex;gap:4px;overflow-x:auto;padding:4px;margin-bottom:18px;background:var(--bg2);border:1px solid var(--border);border-radius:999px;scrollbar-width:none}
 .sn{flex:1;white-space:nowrap;border:none;background:transparent;color:var(--muted);font-weight:700;font-size:.8rem;font-family:inherit;padding:8px 14px;border-radius:999px;cursor:pointer}
 .sn.on{background:var(--card2);color:var(--txt);box-shadow:var(--shine)}
 @media(min-width:700px){.stats4{grid-template-columns:repeat(4,1fr)}.subjgrid{grid-template-columns:repeat(3,1fr)}.quick{grid-template-columns:repeat(4,1fr)}}
 @media(min-width:861px){.subnav{display:none}}
-
-/* Terminal+ extension pack */
-.programtools{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 16px}.programtools .btn{font-size:.78rem;padding:8px 12px}
-.alarmhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 14px;padding:12px 14px;border:1px solid var(--border);border-radius:18px;background:var(--bg2)}
-.alarmhead b{font-size:.84rem}.alarmhead .state{color:var(--muted);font-size:.74rem;flex:1;min-width:150px}.alarmdot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}
-.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.formgrid .full{grid-column:1/-1}.editbox{border:1px dashed var(--border);padding:12px;border-radius:18px;background:var(--bg2)}
-.coachmsg{padding:12px 14px;border-radius:18px;background:var(--bg2);border:1px solid var(--border);margin-bottom:8px;line-height:1.45;font-size:.86rem}.coachmsg.me{background:rgba(10,132,255,.12);border-color:rgba(10,132,255,.3)}.coachlog{max-height:360px;overflow:auto;margin-bottom:10px}
-.traininggrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}.trainingcard{cursor:pointer;transition:.2s}.trainingcard:active{transform:scale(.98)}.kpi{font-size:1.5rem;font-weight:800}.muted{color:var(--muted)}
-@media(max-width:700px){.formgrid{grid-template-columns:1fr}.formgrid .full{grid-column:auto}}
 </style>
 </head>
 <body>
@@ -223,6 +227,8 @@ const CONSEILS = {
   detente:["Mets un minuteur avant de commencer : la détente doit rester courte.","Préfère un contenu qui t'apprend quelque chose.","Coupe dès que le minuteur sonne — pas de scroll infini."],
   culte:["Profite pleinement de ce temps de repos et de communauté.","Les révisions attendront demain — le Sabbat fait partie de l'équilibre.","Reconnecte-toi avec ta famille et ton église."],
   coucher:["Écran coupé 30 min avant de dormir.","Prépare tes affaires pour demain avant d'éteindre la lumière.","Un coucher régulier vaut mieux qu'une grasse matinée le week-end."],
+  etirements:["5 minutes suffisent : nuque, dos, jambes.","Une douche froide en fin de douche réveille mieux qu'un café.","Fais-le AVANT de regarder ton téléphone, pas après."],
+  cours:["Note l'essentiel, pas tout — tu retiens mieux en résumant.","Pose une question dès que tu ne comprends pas, pas après coup.","Éteins les notifications du téléphone pendant les cours."],
   combat:["Échauffe-toi 10 minutes avant toute séance de frappe ou de mouvement.","Technique avant vitesse, vitesse avant puissance.","Le shadow-boxing suffit pour progresser sans matériel.","Étire-toi après l'effort, jamais à froid."],
   psychologie:["Observe les intentions derrière les mots, pas seulement les mots.","Une bonne question ouverte en dit plus qu'un interrogatoire.","Utilise ça pour comprendre les gens — jamais contre leur intérêt."],
   piano:["10 minutes par jour valent mieux qu'une heure une fois par semaine.","Travaille une main à la fois avant de les combiner.","Enregistre-toi de temps en temps pour entendre tes progrès."],
@@ -254,6 +260,8 @@ const PROGRAMS = {
   detente:{n:"Détente (vidéos)",ico:"📱",cat:"Repos",xp:5,apps:[],hab:[],tips:"detente"},
   culte:{n:"Culte / Église",ico:"🙏",cat:"Spiritualité",xp:15,apps:[],hab:[],tips:"culte"},
   coucher:{n:"Coucher",ico:"😴",cat:"Discipline",xp:5,apps:[],hab:["dormir"],tips:"coucher"},
+  etirements:{n:"Étirements & toilette",ico:"🤸",cat:"Discipline",xp:10,apps:[],hab:[],tips:"etirements"},
+  cours:{n:"Cours",ico:"🏫",cat:"École",xp:25,apps:[],hab:[],tips:"cours"},
   combat:{n:"Arts martiaux / Combat",ico:"🥋",cat:"Physique",xp:30,apps:[],hab:[],tips:"combat"},
   psychologie:{n:"Psychologie & Influence",ico:"🎭",cat:"Social",xp:25,apps:["anki"],hab:[],tips:"psychologie"},
   piano:{n:"Piano",ico:"🎹",cat:"Créativité",xp:20,apps:["simplypiano"],hab:[],tips:"piano"},
@@ -274,19 +282,19 @@ const HABITS = {
   erreur:"Noter une erreur / jour", corriger:"Corriger une erreur", actif:"Rappel actif en cours",
   dormir:"Dormir à l'heure (21h30)", lire:"Lire", sport:"Sport", anglais:"Anglais", revisions:"Réviser le jour même"
 };
-const MATIN=[["04h48","05h15","reveil"],["05h15","05h28","meditation"],["05h28","05h37","logique"],["05h37","05h50","revisions"],["05h50","06h20","lecture"]];
+const MATIN=[["04h48","05h00","reveil"],["05h00","05h15","etirements"],["05h15","05h28","meditation"],["05h28","05h37","logique"],["05h37","05h50","revisions"],["05h50","06h20","lecture"]];
 const SOIR_14H=[["14h00","14h30","repos"],["14h30","15h15","sport"],["15h30","16h00","combat"],["16h00","16h20","strategie"],["16h20","17h00","revisions"],
   ["17h00","17h20","observation"],["17h20","17h35","anglais"],["17h35","18h00","psychologie"],["18h00","19h00","repos"],
   ["19h00","20h30","revisions"],["20h30","20h50","lecture"],["20h50","21h00","observation"],["21h00","21h30","communication"],["21h30","21h35","coucher"]];
 const SCHEDULE_DEFAULT = {
-  Lundi:[...MATIN,...SOIR_14H],
-  Mardi:[...MATIN,["19h00","19h30","repos"],["19h30","20h10","revisions"],["20h10","20h30","anglais"],
+  Lundi:[...MATIN,["07h10","12h10","cours"],...SOIR_14H],
+  Mardi:[...MATIN,["07h10","17h00","cours"],["19h00","19h30","repos"],["19h30","20h10","revisions"],["20h10","20h30","anglais"],
     ["20h30","20h50","lecture"],["20h50","21h00","observation"],["21h00","21h30","communication"],["21h30","21h35","coucher"]],
-  Mercredi:[...MATIN,...SOIR_14H],
-  Jeudi:[...MATIN,["17h00","17h30","repos"],["17h30","17h50","strategie"],["17h50","18h30","revisions"],
+  Mercredi:[...MATIN,["07h10","12h00","cours"],...SOIR_14H],
+  Jeudi:[...MATIN,["07h10","15h00","cours"],["17h00","17h30","repos"],["17h30","17h50","strategie"],["17h50","18h30","revisions"],
     ["18h30","18h50","observation"],["18h50","19h05","anglais"],["19h05","19h25","psychologie"],["19h25","20h10","revisions"],
     ["20h10","20h30","lecture"],["20h30","20h45","observation"],["20h45","21h15","communication"],["21h15","21h30","coucher"]],
-  Vendredi:[...MATIN,["18h00","18h30","repos"],["18h30","19h10","revisions"],["19h10","19h30","observation"],
+  Vendredi:[...MATIN,["07h10","16h00","cours"],["18h00","18h30","repos"],["18h30","19h10","revisions"],["19h10","19h30","observation"],
     ["19h30","19h45","anglais"],["19h45","20h10","psychologie"],["20h10","20h30","repos"],["20h30","20h50","lecture"],
     ["20h50","21h00","observation"],["21h00","21h20","communication"],["21h20","21h30","coucher"]],
   Samedi:[["04h48","05h15","reveil"],["05h15","05h28","meditation"],["05h28","05h37","logique"],["05h50","06h20","lecture"],
@@ -327,16 +335,13 @@ const RAPPELS=[["04h48","Debout — pas de téléphone (Alarmy)"],["05h15","Méd
   ["Retour","Réviser avant de te distraire"],["20h30","Lecture de la Bible"],["21h00","Moment famille"],["21h30","Coucher"],["09h00 (sam.)","Culte"]];
 const KEY="terminalplus_v1";
 let S;
-function def(){return{xp:0,hist:[],habits:{},journal:{},done:{},studyMin:0,subjects:{},reminders:RAPPELS.map(()=>true),light:false,schedule:JSON.parse(JSON.stringify(SCHEDULE_DEFAULT)),cards:[],rigueur:false,syncId:"",alarms:[],customPrograms:{},coachLog:[],training:{xp:0,stats:{}}}}
+function def(){return{xp:0,hist:[],habits:{},journal:{},done:{},studyMin:0,subjects:{},reminders:RAPPELS.map(()=>true),light:false,schedule:JSON.parse(JSON.stringify(SCHEDULE_DEFAULT)),cards:[],rigueur:false,syncId:""}}
 function load(){try{S=JSON.parse(localStorage.getItem(KEY))||def()}catch(e){S=def()}
   if(!S.subjects)S.subjects={}; if(!S.reminders)S.reminders=RAPPELS.map(()=>true);
   if(!S.schedule)S.schedule=JSON.parse(JSON.stringify(SCHEDULE_DEFAULT));
-  if(!S.cards)S.cards=[]; if(S.rigueur===undefined)S.rigueur=false; if(S.syncId===undefined)S.syncId=""; if(!S.alarms)S.alarms=[]; if(!S.customPrograms)S.customPrograms={}; if(!S.coachLog)S.coachLog=[]; if(!S.training)S.training={xp:0,stats:{}}; if(!S.habitNames)S.habitNames={}; if(!S.subjectMethods)S.subjectMethods={};}
+  if(!S.cards)S.cards=[]; if(S.rigueur===undefined)S.rigueur=false; if(S.syncId===undefined)S.syncId="";}
 function save(){localStorage.setItem(KEY,JSON.stringify(S))}
 load();
-
-function ensureAfternoonSport(){const days=["Lundi","Mardi","Mercredi","Jeudi"];days.forEach(d=>{S.schedule[d]=S.schedule[d]||[];if(!S.schedule[d].some(x=>x[2]==="sport"&&toMin(x[0])>=720&&toMin(x[0])<1080)){S.schedule[d].push(["14h00","14h30","sport"]);S.schedule[d].sort((a,b)=>toMin(a[0])-toMin(b[0]));}});}
-ensureAfternoonSport();save();
 function todayKey(){return new Date().toISOString().slice(0,10)}
 function weekKey(){const d=new Date();d.setDate(d.getDate()-((d.getDay()+6)%7));return d.toISOString().slice(0,10)}
 function levelOf(xp){let l=1;for(let i=0;i<LEVELS.length;i++){if(xp>=LEVELS[i])l=i+1}return l}
@@ -357,7 +362,7 @@ document.getElementById("modalbg").addEventListener("click",e=>{if(e.target.id==
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")}
 const VIEWS=[["dash","🏠","Dashboard"],["planning","🗓️","Planning"],["etudes","📚","Études"],["fiches","🧠","Fiches (SRS)"],["competences","🎯","Compétences"],
  ["apps","📱","Applications"],["ressources","🔗","Ressources"],["habits","✅","Habitudes"],["journal","📓","Journal"],
- ["progression","⚡","Progression"],["formation","🧪","Formation"],["alarmes","⏰","Alarmes"],["coach","🧠","Coach"],["studio","🛠️","Studio"],["params","⚙️","Paramètres"]];
+ ["progression","⚡","Progression"],["params","⚙️","Paramètres"]];
 let CUR="dash", CURPROG=null, TIMERP=null;
 function buildNav(){
   document.getElementById("sidebar").innerHTML='<div class="logo">Terminal+</div>'+VIEWS.map(v=>`<button class="navbtn" data-v="${v[0]}" onclick="go('${v[0]}')"><span class="ico">${v[1]}</span>${v[2]}</button>`).join("");
@@ -368,7 +373,7 @@ function go(v,arg){CUR=v;CURPROG=arg||CURPROG;clearInterval(TIMERP);TIMERP=null;
   render();window.scrollTo(0,0)}
 function render(){const m=document.getElementById("main");
   ({dash:renderDash,planning:renderPlanning,etudes:renderEtudes,competences:renderCompetences,apps:renderApps,
-    ressources:renderRessources,habits:renderHabits,journal:renderJournal,progression:renderProgression,params:renderParams,fiches:renderFiches,formation:renderFormation,alarmes:renderAlarmes,coach:renderCoach,studio:renderStudio})[CUR](m);if(GROUP[CUR])m.insertAdjacentHTML("afterbegin",subnav())}
+    ressources:renderRessources,habits:renderHabits,journal:renderJournal,progression:renderProgression,params:renderParams,fiches:renderFiches})[CUR](m);if(GROUP[CUR])m.insertAdjacentHTML("afterbegin",subnav())}
 function renderDash(m){
   const dn=dayName(),slots=S.schedule[dn]||[],nm=nowMin();
   let cur=null,nxt=null;
@@ -376,7 +381,10 @@ function renderDash(m){
   const lvl=levelOf(S.xp),base=LEVELS[lvl-1],nx=nextLevelXp(S.xp);
   const pct=Math.min(100,Math.round((S.xp-base)/(nx-base)*100));
   m.innerHTML=`<div class="brand">${LOGO}<div><div class="bt">Terminal<span>+</span></div><div class="bs">Ton avenir se prépare maintenant</div></div><div class="lvbadge">Niv. ${lvl}</div></div>
-  <div class="hello card"><div class="hi">🎯</div><div class="ht"><b>Bonjour Mleck !</b><p>${cur?`Maintenant : ${PROGRAMS[cur[2]].ico} ${PROGRAMS[cur[2]].n} · ${cur[0]}–${cur[1]}`:(nxt?`Prochaine : ${PROGRAMS[nxt[2]].ico} ${PROGRAMS[nxt[2]].n} à ${nxt[0]}`:coachMsg("hello"))}</p></div><span class="pillobj">🔥 Objectif : Réussir ton bac</span></div>
+  <div class="hello card"><div class="hi">${cur?PROGRAMS[cur[2]].ico:"🎯"}</div><div class="ht"><b>Bonjour Mleck !</b><p>${cur?`En cours : ${PROGRAMS[cur[2]].n} · ${cur[0]}–${cur[1]}`:(nxt?`Prochaine : ${PROGRAMS[nxt[2]].ico} ${PROGRAMS[nxt[2]].n} à ${nxt[0]}`:coachMsg("hello"))}</p>
+    ${cur?`<button class="btn primary" style="margin-top:10px" onclick="go('planning','${cur[2]}')">▶ Commencer · +${PROGRAMS[cur[2]].xp} XP</button>`
+      :nxt?`<button class="btn" style="margin-top:10px" onclick="go('planning','${nxt[2]}')">Voir la prochaine séance →</button>`:""}
+    </div><span class="pillobj">🔥 Objectif : Réussir ton bac</span></div>
   <div class="stats4">
     <div class="tile"><i style="--c:#30d158">✅</i><div><b>${slots.filter(x=>S.done[`${dn}|${x[0]}|${x[2]}`]).length}/${slots.length}</b><span>Séances du jour</span></div></div>
     <div class="tile"><i style="--c:#0a84ff">📖</i><div><b>${(S.studyMin/60).toFixed(1)}h</b><span>Temps d'étude</span></div></div>
@@ -390,33 +398,50 @@ function renderDash(m){
   <div class="skillrow">${SK.filter(k=>PROGRAMS[k[0]]).map(k=>`<div class="sk" onclick="go('planning','${k[0]}')"><i>${PROGRAMS[k[0]].ico}</i>${k[1]}</div>`).join("")}</div>
   <div class="secthead"><h2>⚡ Outils rapides</h2></div>
   <div class="quick"><button onclick="go('planning')">🗓️ Planning</button><button onclick="go('habits')">✅ Habitudes</button><button onclick="go('journal')">📓 Journal</button><button onclick="document.getElementById('dashTimer').scrollIntoView({behavior:'smooth',block:'center'})">⏱️ Concentration</button></div>
-  <div class="grid g2" style="margin-top:14px">
-    <div class="card"><h3><span class="dot"></span>Séance en cours</h3>
-      ${cur?`<div style="font-size:1.1rem;font-weight:800">${PROGRAMS[cur[2]].ico} ${PROGRAMS[cur[2]].n}</div>
-        <p style="color:var(--muted);font-size:.85rem;margin:6px 0 12px">${cur[0]} – ${cur[1]} · +${PROGRAMS[cur[2]].xp} XP</p>
-        <button class="btn primary" onclick="go('planning','${cur[2]}')">Ouvrir la séance →</button>`
-        :`<p style="color:var(--muted)">Aucune séance en cours${nxt?` — prochaine : <b>${nxt[0]} ${PROGRAMS[nxt[2]].n}</b>`:""}. Utilise le minuteur !</p>`}
-    </div>
-    <div class="card"><h3><span class="dot" style="background:var(--gold)"></span>Mode concentration</h3>
-      <div class="timerbig" id="dashTimer">25:00</div>
-      <div class="timerbtns">
-        <button class="btn primary" onclick="startTimer(25)">▶ 25 min</button>
-        <button class="btn" onclick="startTimer(45)">45</button>
-        <button class="btn" onclick="startTimer(60)">60</button>
-        <button class="btn ghost" onclick="stopTimer()">■</button>
-      </div></div>
+  <div class="secthead"><h2>📋 Programme du jour</h2><a onclick="go('planning')">Tout voir →</a></div>
+  <div class="card timeline" style="padding:6px 0;margin-bottom:14px">
+    ${slots.length?slots.map((sl,i)=>{const pp=PROGRAMS[sl[2]];const dn2=S.done[`${dn}|${sl[0]}|${sl[2]}`];const cr=nm>=toMin(sl[0])&&nm<toMin(sl[1]);
+      return `<div class="trow ${cr?"cur":""} ${dn2?"tdone":""}" onclick="go('planning','${sl[2]}')">
+        <span class="tt">${sl[0]}</span><span class="ti">${pp.ico}</span>
+        <span class="tn">${pp.n}</span>
+        ${dn2?'<span class="tcheck">✓</span>':`<span class="txp">+${pp.xp}</span>`}
+        <span class="tarrow">›</span></div>`}).join(""):"<p style='padding:14px;color:var(--muted)'>Rien de prévu.</p>"}
   </div>
+  ${timerHTML(cur?cur[2]:null)}
   <div class="card" style="margin-top:14px"><h3><span class="dot" style="background:var(--green)"></span>Rappels du jour</h3>
     ${RAPPELS.slice(0,8).map((r,i)=>S.reminders[i]?`<div class="lrow"><span>🕐 <b>${r[0]}</b> — ${r[1]}</span></div>`:"").join("")||"<p style='color:var(--muted)'>Tous désactivés.</p>"}</div>`;
 }
-let TREM=25*60,TINT=null;
-function startTimer(min){TREM=min*60;clearInterval(TINT);
-  TINT=setInterval(()=>{TREM--;if(TREM<=0){clearInterval(TINT);finishTimer();return}drawTimer()},1000);drawTimer()}
-function stopTimer(){clearInterval(TINT);drawTimer()}
-function drawTimer(){const el=document.getElementById("dashTimer");if(!el)return;
-  const mm=String(Math.floor(TREM/60)).padStart(2,"0"),ss=String(TREM%60).padStart(2,"0");
-  el.textContent=mm+":"+ss}
-function finishTimer(){addXP(25,"Session de concentration");modal(`<div class="big">🎉</div><h2>Session terminée !</h2><p style="color:var(--muted);margin:8px 0 16px">+25 XP gagnés pour ta concentration.</p><button class="btn green" onclick="closeModal()">Continuer</button>`)}
+let TDUR=25*60,TREM=25*60,TINT=null,TRUN=false,TPROG=null;
+function timerHTML(prog){const dur=TDUR,rem=TREM,ratio=Math.min(1,Math.max(0,1-rem/Math.max(1,dur)));
+  const mm=String(Math.floor(rem/60)).padStart(2,"0"),ss=String(rem%60).padStart(2,"0");
+  const canResume=!TRUN&&TREM>0&&TREM<TDUR;
+  const startBtn=TRUN?`<button class="btn" onclick="pauseTimer()">⏸ Pause</button>`
+    :canResume?`<button class="btn primary" onclick="resumeTimer()">▶ Reprendre</button>`
+    :`<button class="btn primary" onclick="startTimer(25,${prog?`'${prog}'`:"null"})">▶ Démarrer</button>`;
+  return `<div class="card"><h3><span class="dot" style="background:var(--gold)"></span>⏱️ Mode concentration</h3>
+    <p style="text-align:center;color:var(--muted);font-size:.78rem;margin:-4px 0 8px">${prog?PROGRAMS[prog].n:"Session libre"}</p>
+    <div class="timerbig" id="dashTimer">${mm}:${ss}</div>
+    <div class="xpbar" style="max-width:280px;margin:0 auto 14px"><div id="timerBarFill" style="width:${Math.round(ratio*100)}%"></div></div>
+    <div class="segdisp">${[25,45,60].map(p=>`<button class="seg ${dur===p*60?"on":""}" onclick="startTimer(${p},${prog?`'${prog}'`:"null"})">${p} min</button>`).join("")}</div>
+    <div style="display:flex;gap:8px;justify-content:center;align-items:center;margin-top:10px">
+      <input type="number" id="customMin" min="1" max="240" placeholder="Durée perso (min)" style="max-width:170px;text-align:center">
+      <button class="btn small" onclick="const v=parseInt(document.getElementById('customMin').value);if(v>0)startTimer(v,${prog?`'${prog}'`:"null"});else toast('Entre un nombre de minutes')">Démarrer</button>
+    </div>
+    <div class="timerbtns" style="margin-top:10px">${startBtn}<button class="btn ghost" onclick="resetTimer(${prog?`'${prog}'`:"null"})">↺ Réinit.</button></div>
+  </div>`}
+function startTimer(min,prog){TDUR=min*60;TREM=TDUR;TPROG=prog||null;TRUN=true;clearInterval(TINT);
+  TINT=setInterval(tickTimer,1000);render()}
+function pauseTimer(){TRUN=false;clearInterval(TINT);render()}
+function resumeTimer(){if(TREM<=0)return;TRUN=true;clearInterval(TINT);TINT=setInterval(tickTimer,1000);render()}
+function resetTimer(prog){clearInterval(TINT);TRUN=false;TDUR=25*60;TREM=25*60;TPROG=prog||null;render()}
+function tickTimer(){TREM--;if(TREM<=0){clearInterval(TINT);TRUN=false;finishTimerSession();return}drawTimerLive()}
+function drawTimerLive(){const el=document.getElementById("dashTimer");if(!el)return;
+  el.textContent=String(Math.floor(TREM/60)).padStart(2,"0")+":"+String(TREM%60).padStart(2,"0");
+  const bar=document.getElementById("timerBarFill");if(bar)bar.style.width=Math.round((1-TREM/Math.max(1,TDUR))*100)+"%"}
+function finishTimerSession(){
+  if(TPROG&&PROGRAMS[TPROG]){completeProg(TPROG)}
+  else{addXP(25,"Session de concentration");modal(`<div class="big">🎉</div><h2>Session terminée !</h2><p style="font-size:2rem;font-weight:800;color:var(--green);margin:8px 0">+25 XP</p><p style="color:var(--muted);margin-bottom:16px">Total : <b>${S.xp} XP</b> — Niveau ${levelOf(S.xp)}</p><button class="btn green" onclick="closeModal()">Continuer</button>`)}
+  TDUR=25*60;TREM=25*60;TPROG=null;render()}
 let EDITPLAN=false;
 function delSlot(d,t,k){S.schedule[d]=S.schedule[d].filter(s=>!(s[0]===t&&s[2]===k));save();render()}
 function addSlot(d){const a=document.getElementById("na-"+d).value,b=document.getElementById("nb-"+d).value,p=document.getElementById("np-"+d).value;
@@ -442,15 +467,17 @@ function renderPlanning(m){
     </div>`).join("")}</div>`;
 }
 function openProg(k){CURPROG=k;render()}
-function renderProgram(m,k){const p={...PROGRAMS[k],...(S.customPrograms[k]||{})};
+function renderProgram(m,k){const p=PROGRAMS[k];
   const vids=(VIDEOS[{logique:"logique",strategie:"strategie",informatique:"info",maths:"maths",revisions:"maths",pensee:"critique",lecture:"lecture",business:"business",anglais:"anglais",combat:"combat",psychologie:"psychologie",piano:"piano"}[k]]||[]);
   const tips=CONSEILS[p.tips]||[];
   m.innerHTML=`<button class="btn ghost small" onclick="CURPROG=null;render()">← Retour au planning</button>
   <div class="pdhead" style="margin-top:12px"><div class="pdicon">${p.ico}</div>
     <div><h1 style="margin:0">${p.n}</h1><p class="sub" style="margin:2px 0 0">${p.cat}</p></div></div>
   <div class="chips"><span class="chip xp">+${p.xp} XP à la validation</span><span class="chip">Minuteur inclus</span><span class="chip">Ressources liées</span></div>
-  <div class="alarmhead"><span class="alarmdot"></span><b>⏰ Alarme & 🔔 notification</b><span class="state">Tout se règle depuis l'en-tête de la séance.</span><button class="btn small" onclick="quickAlarm('${k}')">⏰ Programmer</button><button class="btn small" onclick="requestNotify()">🔔 Autoriser</button><button class="btn small" onclick="notifyIn10('${p.n.replace(/'/g,"")}')">+10 min</button></div>
-  <div class="card" style="margin-bottom:14px"><h3><span class="dot" style="background:var(--accent2)"></span>✎ Éditer cette séance</h3><div class="programtools"><button class="btn small" onclick="editProgram('${k}')">Modifier comme une page</button><button class="btn small" onclick="go('coach','${k}')">🧠 Coach cette séance</button><button class="btn small" onclick="go('alarmes')">⏰ Toutes mes alarmes</button></div><p style="color:var(--muted);font-size:.78rem">Titre, méthode, objectif, livres et ressources sont personnalisables depuis l'app.</p></div>
+  <div class="card" style="margin-bottom:14px"><h3><span class="dot" style="background:var(--red)"></span>⏰ Alarme & 🔔 notification</h3>
+    <p style="color:var(--muted);font-size:.8rem;margin-bottom:10px">Réveil et coucher ont déjà une vraie alarme sur ton téléphone. Pour ce programme, demande-moi dans le chat "crée une alarme pour ${p.n}" et je le fais réellement — ou reçois un rappel local pendant que l'app reste ouverte :</p>
+    <button class="btn small" onclick="notifyIn10('${p.n.replace(/'/g,"")}')">🔔 Me notifier dans 10 min</button></div>
+  ${timerHTML(k)}
   <div class="grid g2">
     <div class="card"><h3><span class="dot"></span>Applications recommandées</h3>
       ${p.apps.length?p.apps.map(a=>{const A=APPS[a];return `<div class="resrow"><div class="ric">${A.ico}</div><div class="rt"><b>${A.n}</b><p>${A.d}</p></div><a href="${A.l}" target="_blank">Ouvrir ↗</a></div>`}).join(""):"<p style='color:var(--muted);font-size:.85rem'>Aucune application nécessaire pour cette séance.</p>"}
@@ -462,7 +489,7 @@ function renderProgram(m,k){const p={...PROGRAMS[k],...(S.customPrograms[k]||{})
   </div>`:""}
   <div class="card"><h3><span class="dot" style="background:var(--gold)"></span>Conseils</h3>
       ${tips.map(t=>`<div class="tip">💡 ${t}</div>`).join("")}
-      ${p.hab.length?`<h3 style="margin-top:16px"><span class="dot" style="background:var(--green)"></span>Habitudes liées</h3>`+p.hab.map(h=>`<div class="lrow" onclick="go('habits')" style="cursor:pointer"><span>✅ ${(S.habitNames&&S.habitNames[h])||HABITS[h]}</span><span style="color:var(--accent);font-size:.75rem">Ouvrir →</span></div>`).join(""):""}
+      ${p.hab.length?`<h3 style="margin-top:16px"><span class="dot" style="background:var(--green)"></span>Habitudes liées</h3>`+p.hab.map(h=>`<div class="lrow" onclick="go('habits')" style="cursor:pointer"><span>✅ ${HABITS[h]}</span><span style="color:var(--accent);font-size:.75rem">Ouvrir →</span></div>`).join(""):""}
       <h3 style="margin-top:16px"><span class="dot" style="background:var(--accent2)"></span>Séance</h3>
       <div class="timerbig" id="dashTimer">25:00</div>
       <div class="timerbtns">
@@ -490,7 +517,7 @@ function renderEtudes(m){
     return `<div class="subj" id="subj-${subj.replace(/\W/g,"")}"><div class="subjhdr" style="--c:${SM[subj][1]}" onclick="this.parentElement.classList.toggle('open')">
       <b>${SM[subj][0]} ${subj}</b><span style="color:var(--muted);font-size:.78rem">${done}/${tot} maîtrisés · ${d.notes.length} erreur(s)</span></div>
     <div class="subjbody">
-      <div class="tip">📌 Méthode : ${(S.subjectMethods&&S.subjectMethods[subj])||METHODES[subj]}</div>
+      <div class="tip">📌 Méthode : ${METHODES[subj]}</div>
       <div style="display:flex;gap:6px;margin-bottom:8px"><input type="text" id="chap-${subj.replace(/\W/g,"")}" placeholder="Nouveau chapitre…" style="flex:1">
       <button class="btn primary small" onclick="addChap('${subj}')">+ Ajouter</button></div>
       ${d.chaps.map((c,i)=>`<div class="chap"><span style="flex:1">${esc(c.n)}</span>
@@ -562,7 +589,7 @@ function renderHabits(m){
     <div class="card"><div class="stat">${Math.round(done/keys.length*100)}%</div><div class="statlbl">Taux du jour</div></div>
     <div class="card"><div class="stat" style="color:var(--gold)">🏆 ${S.bestStreak||0}</div><div class="statlbl">Meilleure série</div></div></div>
   <div class="card">${keys.map(k=>`<div class="habit ${today[k]?"done":""}">
-    <div class="cb ${today[k]?"on":""}" onclick="toggleHabit('${k}')">✔</div><b>${(S.habitNames&&S.habitNames[k])||HABITS[k]}</b>
+    <div class="cb ${today[k]?"on":""}" onclick="toggleHabit('${k}')">✔</div><b>${HABITS[k]}</b>
     <span class="meta">${today[k]?"Validé ✓":"À faire"}</span></div>`).join("")}</div>`;
 }
 function toggleHabit(k){const tk=todayKey();S.habits[tk]=S.habits[tk]||{};
@@ -603,10 +630,6 @@ function gradeCard(id,g){const c=S.cards.find(x=>x.id===id);if(!c)return;const n
   else{c.ivl=c.ivl===0?1:g==="hard"?Math.max(1,Math.round(c.ivl*1.2)):g==="good"?Math.round(c.ivl*2):Math.round(c.ivl*3);
     c.due=now+c.ivl*86400000;S.xp+=5;S.hist.push({d:todayKey(),x:5,label:"Fiche revue"})}
   CARDSHOW=null;save();render()}
-
-function exportCards(){const blob=new Blob([JSON.stringify(S.cards,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='terminal-plus-fiches.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
-function importCards(input){const f=input.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const a=JSON.parse(r.result);if(!Array.isArray(a))throw 0;const valid=a.filter(c=>c.front&&c.back).map(c=>({...c,id:c.id||'c'+Date.now()+Math.random(),due:c.due||Date.now(),ivl:c.ivl||0}));S.cards=[...S.cards,...valid];save();render();toast('🧠 '+valid.length+' fiches importées')}catch(e){toast('Fichier de fiches invalide')}};r.readAsText(f)}
-
 function renderFiches(m){
   const due=S.cards.filter(c=>c.due<=Date.now());
   m.innerHTML=`<h1>🧠 Fiches (répétition espacée)</h1><p class="sub">Comme Anki, directement dans l'app. Crée une fiche, révise-la quand elle est due — l'intervalle s'allonge si tu la connais bien.</p>
@@ -614,7 +637,7 @@ function renderFiches(m){
     <select id="cardSubj" style="margin-bottom:8px">${SUBJECTS.map(s=>`<option>${s}</option>`).join("")}<option>Général</option></select>
     <textarea id="cardFront" placeholder="Recto — la question"></textarea><div style="height:8px"></div>
     <textarea id="cardBack" placeholder="Verso — la réponse"></textarea><div style="height:10px"></div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" onclick="addCard()">Ajouter la fiche</button><button class="btn small" onclick="exportCards()">⬇ Exporter</button><button class="btn small" onclick="document.getElementById("importCards").click()">⬆ Importer</button><input id="importCards" type="file" accept="application/json" style="display:none" onchange="importCards(this)"></div></div>
+    <button class="btn primary" onclick="addCard()">Ajouter la fiche</button></div>
   <div class="card" style="margin-bottom:16px"><h3><span class="dot" style="background:var(--green)"></span>À réviser maintenant (${due.length})</h3>
     ${due.length?due.map(c=>`<div class="slot" style="cursor:default;margin-bottom:10px">
       <div class="n">${c.subj} · ${c.front}</div>
@@ -647,36 +670,6 @@ function renderProgression(m){
   <div class="card"><h3><span class="dot" style="background:var(--green)"></span>Historique XP</h3>
     ${S.hist.slice(-25).reverse().map(h=>`<div class="lrow"><span>${h.d} — ${esc(h.label)}</span><b style="color:var(--green)">+${h.x}</b></div>`).join("")||"<p style='color:var(--muted)'>Encore aucun XP — commence une séance !</p>"}</div></div>`;
 }
-
-function requestNotify(){if(!('Notification' in window)){toast('Notifications non supportées');return}Notification.requestPermission().then(p=>toast(p==='granted'?'🔔 Notifications activées':'Notifications refusées'))}
-function alarmSound(){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const c=new C(),n=c.currentTime;for(let i=0;i<4;i++){const o=c.createOscillator(),g=c.createGain();o.frequency.value=i%2?880:660;g.gain.setValueAtTime(.0001,n+i*.28);g.gain.exponentialRampToValueAtTime(.25,n+i*.28+.03);g.gain.exponentialRampToValueAtTime(.0001,n+i*.28+.22);o.connect(g).connect(c.destination);o.start(n+i*.28);o.stop(n+i*.28+.24)}}catch(e){}}
-function fireAlarm(a){alarmSound();if('Notification' in window&&Notification.permission==='granted')new Notification('Terminal+ ⏰',{body:a.label,icon:'icon-192.png',tag:a.id});toast('⏰ '+a.label)}
-function checkAlarms(){const now=Date.now();(S.alarms||[]).forEach(a=>{if(a.enabled&&a.at<=now&&a.at>now-7000){fireAlarm(a);if(a.repeat==='daily'){const d=new Date(a.at);d.setDate(d.getDate()+1);a.at=d.getTime()}else a.enabled=false}});save()}
-setInterval(checkAlarms,5000)
-function addAlarm(label,time,repeat){if(!time){toast('Choisis une heure');return}const [h,m]=time.split(':').map(Number),d=new Date();d.setHours(h,m,0,0);if(d.getTime()<=Date.now())d.setDate(d.getDate()+1);S.alarms.push({id:'a'+Date.now().toString(36),label,at:d.getTime(),time,repeat:repeat||'once',enabled:true});save();toast('⏰ Alarme programmée');render()}
-function quickAlarm(k){const p=PROGRAMS[k],d=new Date(Date.now()+25*60000),hh=String(d.getHours()).padStart(2,'0'),mm=String(d.getMinutes()).padStart(2,'0');modal(`<div class="big">⏰</div><h2>Alarme — ${p.n}</h2><p class="muted" style="margin:8px 0 14px">Choisis l'heure.</p><input type="time" id="alarmTime" value="${hh}:${mm}" style="margin-bottom:8px"><select id="alarmRep" style="margin-bottom:12px"><option value="once">Une fois</option><option value="daily">Tous les jours</option></select><button class="btn primary" onclick="addAlarm('${p.n.replace(/'/g,"\\'")}',document.getElementById('alarmTime').value,document.getElementById('alarmRep').value);closeModal()">Enregistrer</button>`)}
-function renderAlarmes(m){const arr=(S.alarms||[]).slice().sort((a,b)=>a.at-b.at);const fmt=t=>new Date(t).toLocaleString('fr-FR',{dateStyle:'short',timeStyle:'short'});m.innerHTML=`<h1>⏰ Alarmes & notifications</h1><p class="sub">Tout gérer depuis Terminal+.</p><div class="alarmhead"><span class="alarmdot"></span><b>État</b><span class="state">${('Notification' in window&&Notification.permission==='granted')?'Notifications autorisées':'Autorisation nécessaire'}</span><button class="btn small primary" onclick="requestNotify()">🔔 Activer</button></div><div class="card" style="margin-bottom:14px"><h3>➕ Nouvelle alarme</h3><div class="formgrid"><input id="newAlarmLabel" placeholder="Ex : Révision maths"><input id="newAlarmTime" type="time"><select id="newAlarmRep"><option value="once">Une fois</option><option value="daily">Tous les jours</option></select><button class="btn primary" onclick="addAlarm(document.getElementById('newAlarmLabel').value||'Terminal+',document.getElementById('newAlarmTime').value,document.getElementById('newAlarmRep').value)">Ajouter</button></div></div><div class="card"><h3>Mes alarmes (${arr.length})</h3>${arr.length?arr.map(a=>`<div class="lrow"><span>⏰ <b>${esc(a.label)}</b><br><small class="muted">${fmt(a.at)} · ${a.repeat==='daily'?'quotidienne':'une fois'}</small></span><div><button class="btn small" onclick="a=S.alarms.find(x=>x.id==='${a.id}');a.enabled=!a.enabled;save();render()">${a.enabled?'Désactiver':'Activer'}</button> <button class="btn small ghost" onclick="S.alarms=S.alarms.filter(x=>x.id!=='${a.id}');save();render()">🗑</button></div></div>`).join(''):'<p class="muted">Aucune alarme.</p>'}</div><div class="tip" style="margin-top:14px">ℹ️ Une PWA statique ne peut pas garantir une alarme système lorsque le navigateur est totalement fermé. Pour cela, on ajoutera un service push/backend.</div>`}
-function programData(k){return {...PROGRAMS[k],...(S.customPrograms[k]||{})}}
-function editProgram(k){const p=programData(k);modal(`<h2>✎ Modifier ${esc(p.n)}</h2><div class="editbox" style="text-align:left"><div class="formgrid"><input id="epn" value="${esc(p.n)}" placeholder="Titre"><input id="epcat" value="${esc(p.cat)}" placeholder="Catégorie"><textarea class="full" id="epmethod" placeholder="Méthode">${esc(p.method||METHODE[k]||'')}</textarea><textarea class="full" id="epgoal" placeholder="Objectif">${esc(p.goal||'')}</textarea><textarea class="full" id="epbooks" placeholder="Livres, un par ligne">${esc((p.books||LIVRES[k]||[]).join('\n'))}</textarea><textarea class="full" id="epresources" placeholder="Ressources, un par ligne">${esc((p.resources||[]).join('\n'))}</textarea></div><button class="btn primary" style="margin-top:10px" onclick="saveProgramEdit('${k}')">Enregistrer</button></div>`)}
-function saveProgramEdit(k){const g=id=>document.getElementById(id).value;S.customPrograms[k]={...(S.customPrograms[k]||{}),n:g('epn')||PROGRAMS[k].n,cat:g('epcat')||PROGRAMS[k].cat,method:g('epmethod'),goal:g('epgoal'),books:g('epbooks').split('\n').map(x=>x.trim()).filter(Boolean),resources:g('epresources').split('\n').map(x=>x.trim()).filter(Boolean)};save();closeModal();render();toast('✎ Séance personnalisée')}
-function renderFormation(m){const ms=[['🎯','Focus','25 min sans téléphone'],['🧠','Mémoire','10 cartes SRS'],['🧩','Logique','3 problèmes sans correction'],['👁️','Observation','5 détails puis vérification'],['🛡️','Self-control','30 min sans distraction']];m.innerHTML=`<h1>🧪 Centre de formation</h1><p class="sub">Entraînement progressif : discipline, mémoire, logique, observation et études.</p><div class="grid g4"><div class="card"><div class="kpi">${S.training.xp}</div><span class="muted">XP formation</span></div><div class="card"><div class="kpi">${Object.keys(S.training.stats).length}</div><span class="muted">Compétences</span></div><div class="card"><div class="kpi">${S.cards.filter(c=>c.due<=Date.now()).length}</div><span class="muted">Fiches dues</span></div></div><div class="traininggrid" style="margin-top:14px">${ms.map((x,i)=>`<div class="card trainingcard" onclick="startMission(${i})"><div style="font-size:1.8rem">${x[0]}</div><h3>${x[1]}</h3><p class="muted">${x[2]}</p></div>`).join('')}</div><div class="card" style="margin-top:14px"><h3>📈 Méthode</h3><div class="tip">Comprendre → pratiquer → tester sans aide → corriger → répéter.</div><div class="tip">Le coach te questionne au lieu de faire l'exercice à ta place.</div></div>`}
-function startMission(i){const n=['Focus','Mémoire','Logique','Observation','Self-control'][i];S.training.xp+=10;S.training.stats[n]=(S.training.stats[n]||0)+1;save();toast('🧪 '+n+' validé · +10 XP');render()}
-function coachAnswer(k,msg){const p=programData(k||'revisions'),q=msg.toLowerCase();if(q.includes('commenc')||q.includes('quoi'))return `Pour ${p.n}, commence par ${p.method||METHODE[k]||'ferme le cours et écris ce que tu sais avant de vérifier.'}`;if(q.includes('livre'))return `Livres : ${(p.books||LIVRES[k]||LIVRES.lecture||[]).join(' ; ')}`;if(q.includes('méthode'))return `Méthode : ${p.method||METHODE[k]||'rappel actif + exercice + correction des erreurs.'}`;return `Sur ${p.n}, donne-moi ta tentative exacte et ce qui bloque. Je vais te poser une question à la fois.`}
-function sendCoach(k){const e=document.getElementById('coachInput');if(!e||!e.value.trim())return;const msg=e.value.trim();S.coachLog.push({r:'me',k,msg},{r:'coach',k,msg:coachAnswer(k,msg)});save();render()}
-function renderCoach(m){const k=CURPROG&&PROGRAMS[CURPROG]?CURPROG:'revisions',p=programData(k),log=S.coachLog.filter(x=>x.k===k).slice(-20);m.innerHTML=`<h1>🧠 Coach Terminal+</h1><p class="sub">Professeur exigeant : il te fait réfléchir, justifier et corriger.</p><div class="chips"><span class="chip xp">${p.ico} ${p.n}</span><span class="chip">Question par question</span><span class="chip">Pas de solution automatique</span></div><div class="card"><div class="coachlog">${log.length?log.map(x=>`<div class="coachmsg ${x.r==='me'?'me':''}"><b>${x.r==='me'?'Toi':'Coach'}</b><br>${esc(x.msg)}</div>`).join(''):'<div class="coachmsg"><b>Coach</b><br>Dis-moi ce que tu dois étudier ou ce qui te bloque.</div>'}</div><textarea id="coachInput" placeholder="Ex : Je dois réviser les limites et je ne sais pas par où commencer…"></textarea><button class="btn primary" style="margin-top:8px;width:100%" onclick="sendCoach('${k}')">Envoyer</button></div><div class="card" style="margin-top:14px"><h3>🎓 Méthode</h3><div class="tip">${esc(p.method||METHODE[k]||'Rappel actif → exercice → correction → répétition espacée.')}</div>${(p.books||LIVRES[k]||[]).map(b=>`<div class="tip">📚 ${esc(b)}</div>`).join('')}</div>`}
-
-
-function renderStudio(m){
- const ks=Object.keys(PROGRAMS);
- m.innerHTML=`<h1>🛠️ Studio Terminal+</h1><p class="sub">Ton espace de personnalisation. Tu peux modifier le contenu sans toucher au code.</p>
- <div class="grid g2"><div class="card"><h3>📚 Programmes</h3><p class="muted" style="font-size:.8rem;margin-bottom:10px">Choisis une séance pour modifier son contenu.</p>${ks.map(k=>`<div class="lrow"><span>${PROGRAMS[k].ico} ${esc(programData(k).n)}</span><button class="btn small" onclick="editProgram('${k}')">Modifier</button></div>`).join('')}</div>
- <div class="card"><h3>✅ Habitudes</h3><p class="muted" style="font-size:.8rem;margin-bottom:10px">Personnalise les habitudes affichées.</p>${Object.entries(HABITS).map(([k,v])=>`<div class="lrow"><input id="hab-${k}" value="${esc(v)}" style="flex:1"><button class="btn small" onclick="S.habitNames=S.habitNames||{};S.habitNames['${k}']=document.getElementById('hab-${k}').value;save();toast('Habitude enregistrée')">OK</button></div>`).join('')}</div>
- <div class="card"><h3>🎓 Matières</h3><p class="muted" style="font-size:.8rem;margin-bottom:10px">La méthode affichée dans Études peut être personnalisée.</p>${SUBJECTS.map(sj=>`<div class="block"><b>${SM[sj][0]} ${sj}</b><textarea id="meth-${subKey(sj)}" style="margin-top:8px;min-height:90px" placeholder="Méthode d'étude">${esc((S.subjectMethods||{})[sj]||METHODES[sj])}</textarea><button class="btn small primary" style="margin-top:6px" onclick="S.subjectMethods=S.subjectMethods||{};S.subjectMethods['${sj}']=document.getElementById('meth-${subKey(sj)}').value;save();toast('Méthode enregistrée')">Enregistrer</button></div>`).join('')}</div>
- <div class="card"><h3>💾 Sauvegarde locale</h3><p class="muted" style="font-size:.8rem">Exporte toutes tes données Terminal+ pour les conserver ou les déplacer.</p><button class="btn primary" onclick="exportAllData()">⬇ Exporter toutes mes données</button><button class="btn" style="margin-left:6px" onclick="document.getElementById('importAll').click()">⬆ Importer</button><input id="importAll" type="file" accept="application/json" style="display:none" onchange="importAllData(this)"></div></div>`
-}
-function exportAllData(){const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='terminal-plus-sauvegarde.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
-function importAllData(input){const f=input.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d||typeof d!=='object')throw 0;S={...def(),...d};save();render();toast('💾 Données importées')}catch(e){toast('Sauvegarde invalide')}};r.readAsText(f)}
-
 function renderParams(m){
   m.innerHTML=`<h1>Paramètres</h1><p class="sub">Rappels visuels, apparence et données.</p>
   <div class="grid g2"><div class="card"><h3><span class="dot"></span>Rappels</h3>
